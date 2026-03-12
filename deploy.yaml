@@ -1,21 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: argo-test-app
-  labels:
-    app: argo-test-app
+  name: test-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: argo-test-app
+      app: test-app
   template:
     metadata:
       labels:
-        app: argo-test-app
+        app: test-app
     spec:
       containers:
-      - name: argo-test-app
-        image: us-central1-docker.pkg.dev/project-4b96061c-a0d1-4f8c-ac8/my-docker-repo/app-image:b46115828c0f2b27f9f5bb652bc09662e39081bf
+      - name: test-app
+        image: us-central1-docker.pkg.dev/project-4b96061c-a0d1-4f8c-ac8/my-docker-repo/app-image:539aab2326a4fd9620a38658108c43c0ce291553
         ports:
-        - containerPort: 8080
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-app
+spec:
+  type: NodePort
+  selector:
+    app: test-app
+  ports:
+  - port: 80
+    targetPort: 8000
